@@ -1,1 +1,27 @@
-<p>cart works!</p>
+<div class="cart-panel">
+	<h2 style="color:#4a4e69; text-align:center; margin-bottom: 12px;">🛒 Carrito de Compras</h2>
+	<div *ngIf="cartItems.length === 0" class="cart-empty">
+		El carrito está vacío.
+	</div>
+	<div *ngIf="cartItems.length > 0">
+		<ul style="list-style:none; padding:0; margin:0;">
+			<li *ngFor="let item of cartItems" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; background: #e0e7ff; border-radius: 8px; padding: 8px 12px;">
+				<div style="display:flex; align-items:center; gap:10px;">
+					<img [src]="item.image" [alt]="item.name" style="width:48px; height:32px; object-fit:cover; border-radius:6px;">
+					<span style="font-weight:500; color:#4a4e69;">{{ item.name }}</span>
+					<span style="color:#6c757d; font-size:0.95em;">x{{ item.quantity }}</span>
+				</div>
+				<div style="display:flex; align-items:center; gap:8px;">
+					<span style="color:#5f9ea0; font-weight:600;">${{ (item.price * (item.quantity || 1)).toFixed(2) }}</span>
+					<button (click)="removeItem(item.id)" style="background:#bae1ff; border:none; border-radius:50%; width:28px; height:28px; color:#4a4e69; font-weight:bold; cursor:pointer;">&times;</button>
+				</div>
+			</li>
+		</ul>
+		<div style="margin-top:16px; text-align:right;">
+			<span style="font-size:1.1em; color:#4a4e69; font-weight:600;">Total: ${{ total.toFixed(2) }}</span>
+		</div>
+		<div style="margin-top:12px; text-align:center;">
+			<button (click)="clearCart()" style="background:linear-gradient(90deg,#e0e7ff,#bae1ff); color:#4a4e69; border:none; border-radius:20px; padding:8px 24px; font-weight:600; cursor:pointer;">Vaciar carrito</button>
+		</div>
+	</div>
+</div>

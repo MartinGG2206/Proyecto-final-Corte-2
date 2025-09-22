@@ -1,0 +1,12 @@
+/* Estilos para la grilla de productos */
+.products-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 32px;
+	padding: 32px;
+		background: rgba(186, 225, 255, 0.18); /* azul muy suave */
+	border-radius: 20px;
+	margin: 32px auto;
+	max-width: 1200px;
+		box-shadow: 0 8px 32px rgba(186,225,255,0.18);
+}

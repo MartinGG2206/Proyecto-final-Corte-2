@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
-import { Product } from '../../services/product';  // Importa aquí
+import { Product } from '../../models/product.model';
 
 // ... resto del código igual
 @Component({
   selector: 'app-cart',
-  template: `...`, // Mismo template
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './cart.html',
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-  cartItems: Product[] = [];
-  total = 0;
+  public cartItems: Product[] = [];
+  public total = 0;
 
   constructor(private cartService: CartService) {}
 
@@ -21,11 +24,11 @@ export class CartComponent implements OnInit {
     });
   }
 
-  removeItem(id: number): void {
+  public removeItem(id: number): void {
     this.cartService.removeFromCart(id);
   }
 
-  clearCart(): void {
+  public clearCart(): void {
     this.cartService.clearCart();
   }
 }

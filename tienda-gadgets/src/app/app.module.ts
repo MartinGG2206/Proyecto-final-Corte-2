@@ -6,12 +6,7 @@ import { ProductItemComponent } from './components/product-item/product-item.com
 import { CartComponent } from './components/cart/cart.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ProductListComponent,
-    ProductItemComponent,
-    CartComponent
-  ],
+  declarations: [],
   imports: [
     BrowserModule
   ],

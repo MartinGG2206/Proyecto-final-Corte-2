@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ProductItemComponent } from '../product-item/product-item.component';
 import { ProductService } from '../../services/product.service'; // Solo ProductService
 import { Product } from '../../models/product.model'; // Importa Product desde aquí
 import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-product-list',
+  standalone: true,
+  imports: [CommonModule, ProductItemComponent],
   template: `
     <div class="products-grid">
       <app-product-item 

@@ -4,7 +4,7 @@ import { CartComponent } from './components/cart/cart.component';
 
 @Component({
   selector: 'app-root',
-  standalone: false, // Si usas módulos, ajusta
+  standalone: true,
   imports: [ProductListComponent, CartComponent],
   template: `
     <header>

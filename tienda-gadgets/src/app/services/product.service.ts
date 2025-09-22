@@ -41,6 +41,13 @@ export class ProductService {
       description: 'Soporte magnético con rotación 360° y colores vibrantes.',
       price: 19.99,
       image: 'https://via.placeholder.com/300x200/ffff00/000000?text=Soporte+Teléfono'
+    },
+    {
+      id: 6,
+      name: 'Lámpara LED Inteligente',
+      description: 'Lámpara de escritorio con control táctil, varios colores suaves y temporizador.',
+      price: 29.99,
+      image: 'https://via.placeholder.com/300x200/bae1ff/22223b?text=Lámpara+LED'
     }
   ];
 
