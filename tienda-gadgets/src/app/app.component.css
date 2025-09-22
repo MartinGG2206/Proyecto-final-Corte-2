@@ -1,0 +1,75 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4); /* Degradado vivo */
+  min-height: 100vh;
+  animation: pulse 2s infinite; /* Animación sutil */
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.9; }
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.product-card {
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s; /* Efecto hover innovador */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(255,0,0,0.3); /* Sombra roja viva */
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.add-btn {
+  background: linear-gradient(45deg, #ff4757, #ff6348); /* Rojo vivo */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.add-btn:hover {
+  background: linear-gradient(45deg, #ff6348, #ff4757);
+}
+
+.cart-panel {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255,255,255,0.95);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  max-width: 300px;
+  z-index: 1000;
+}
+
+.cart-empty {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #4ecdc4; /* Verde vivo */
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
