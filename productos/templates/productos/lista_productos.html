@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos</title>
+</head>
+<body>
+    <h1>Productos en el Marketplace</h1>
+    <ul>
+        {% for producto in productos %}
+            <li>
+                <h3>{{ producto.nombre }}</h3>
+                <p>{{ producto.descripcion }}</p>
+                <p>Precio: ${{ producto.precio }}</p>
+                <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" width="150" height="150">
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
