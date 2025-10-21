@@ -1,0 +1,42 @@
+<section class="cart">
+  <h2>Tu carrito</h2>
+
+  <ng-container *ngIf="(items$ | async) as items; else empty">
+    <div *ngIf="items.length; else empty">
+      <div class="cart__list">
+        <div class="cart__row" *ngFor="let it of items; index as i">
+          <img [src]="it.imagen || ''" [alt]="it.nombre">
+          <div class="cart__meta">
+            <h3>{{ it.nombre }}</h3>
+            <p *ngIf="it.size">Talla: {{ it.size }}</p>
+            <p class="price">{{ it.precio | currency:'COP':'symbol-narrow':'1.0-0':'es-CO' }}</p>
+          </div>
+          <div class="cart__qty">
+            <button (click)="dec(i, it)">−</button>
+            <span>{{ it.qty }}</span>
+            <button (click)="inc(i, it)">+</button>
+          </div>
+          <div class="cart__line">
+            {{ (it.qty * it.precio) | currency:'COP':'symbol-narrow':'1.0-0':'es-CO' }}
+          </div>
+          <button class="cart__remove" (click)="remove(i)">✕</button>
+        </div>
+      </div>
+
+      <div class="cart__footer">
+        <div class="cart__total">
+          Total: <strong>{{ (total$ | async) | currency:'COP':'symbol-narrow':'1.0-0':'es-CO' }}</strong>
+        </div>
+        <div class="cart__actions">
+          <button class="btn ghost" (click)="clear()">Vaciar</button>
+          <button class="btn primary" (click)="goCheckout()">Proceder al pago</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #empty>
+    <p>Tu carrito está vacío.</p>
+    <a routerLink="/">← Seguir comprando</a>
+  </ng-template>
+</section>

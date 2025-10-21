@@ -1,0 +1,156 @@
+<!-- ================== HERO + BUSCADOR + CARRITO ================== -->
+<section class="hero">
+  <div class="hero__banner">
+    <!-- Fondo rotativo (2 capas con crossfade) -->
+    <img class="hero__bg" [class.is-visible]="showA" [src]="bgA" alt="" />
+    <img class="hero__bg" [class.is-visible]="!showA" [src]="bgB" alt="" />
+
+    <h1 class="hero__title">Encuentra todo lo que necesitas</h1>
+    <p class="hero__subtitle">Ofertas nuevas todos los días para tu hogar.</p>
+
+    <div class="search">
+      <input class="search__input" type="text" placeholder="Busca productos, marcas y más…" />
+      <button class="btn btn--primary">Buscar</button>
+    </div>
+  </div>
+
+  <aside class="cart">
+    <h3 class="cart__title">Carrito de compras</h3>
+
+    <ng-container *ngIf="(cartCount) as count">
+      <p *ngIf="count === 0; else hasItems" class="cart__empty">Tu carrito está vacío.</p>
+      <ng-template #hasItems>
+        <p>Productos: <strong>{{ count }}</strong></p>
+        <p>
+          Total:
+          <strong>{{ (cartTotal) | currency:'COP'}}</strong>
+        </p>
+      </ng-template>
+    </ng-container>
+
+    <button type="button" class="btn btn--accent" (click)="openCart()">Ir al carrito</button>
+  </aside>
+</section>
+
+<!-- ================== CATEGORÍAS EN FILA ================== -->
+<section class="block">
+  <div class="block__head">
+    <h2 class="block__title">Categorías</h2>
+    <button class="link--ghost" *ngIf="selectedCategory" (click)="clearCategory()">Ver todas</button>
+  </div>
+
+  <div class="categories-wrapper">
+    <button class="scroll-btn left" (click)="scrollCategories('left')" aria-label="anterior">‹</button>
+
+    <div #catScroller class="categories-strip" role="list">
+      <button
+        class="cat-chip"
+        *ngFor="let c of categories; trackBy: trackByGrupoCard"
+        (click)="onSelectCategory(c)"
+        [class.active]="selectedCategory === c.slug"
+        role="listitem"
+        [attr.aria-pressed]="selectedCategory === c.slug"
+        [title]="c.name">
+        <span class="cat-chip__icon">{{ c.icon }}</span>
+        <span class="cat-chip__name">{{ c.name }}</span>
+      </button>
+    </div>
+
+    <button class="scroll-btn right" (click)="scrollCategories('right')" aria-label="siguiente">›</button>
+  </div>
+</section>
+
+<!-- ================== OFERTAS ================== -->
+<section class="block">
+  <div class="block__head">
+    <h2 class="block__title">Ofertas especiales</h2>
+  </div>
+
+  <div class="grid grid--3">
+    <a
+      class="product-card"
+      *ngFor="let p of ofertas; trackBy: trackByProducto"
+      [routerLink]="['/producto', $any(p).id]"
+      role="link"
+      tabindex="0"
+      [attr.aria-label]="'Ver ' + p.nombre"
+      style="text-decoration: none; color: inherit;">
+      <img class="product-card__img" [src]="p.imagen" [alt]="p.nombre" />
+      <div class="product-card__body">
+        <h3 class="product-card__name">{{ p.nombre }}</h3>
+        <p class="product-card__desc">{{ p.descripcion }}</p>
+        <div class="product-card__price">$ {{ p.precio | currency:'COP' }}</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ================== POPULARES ================== -->
+<section class="block">
+  <div class="block__head">
+    <h2 class="block__title">Productos populares</h2>
+  </div>
+
+  <div class="grid grid--4">
+    <a
+      class="product-card"
+      *ngFor="let p of populares; trackBy: trackByProducto"
+      [routerLink]="['/producto', $any(p).id]"
+      role="link"
+      tabindex="0"
+      [attr.aria-label]="'Ver ' + p.nombre"
+      style="text-decoration: none; color: inherit;">
+      <img class="product-card__img" [src]="p.imagen" [alt]="p.nombre" />
+      <div class="product-card__body">
+        <h3 class="product-card__name">{{ p.nombre }}</h3>
+        <p class="product-card__desc">{{ p.descripcion }}</p>
+        <div class="product-card__price">$ {{ p.precio| currency:'COP'}}</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ================== MODAL DEL CARRITO ================== -->
+<div class="cart-modal" *ngIf="isCartOpen">
+  <div class="cart-modal__backdrop" (click)="closeCart()"></div>
+
+  <div class="cart-modal__panel" role="dialog" aria-modal="true">
+    <header class="cart-modal__header">
+      <h3>Tu carrito</h3>
+      <button class="cart-modal__close" (click)="closeCart()">✕</button>
+    </header>
+
+    <div class="cart-modal__body">
+      <ng-container *ngIf="(cartItems) as items">
+        <p *ngIf="!items.length" class="muted">No hay productos en el carrito.</p>
+
+        <div class="cart-line" *ngFor="let it of items; let i = index">
+          <img [src]="it.imagen || ''" [alt]="it.nombre" class="cart-thumb" />
+          <div class="cart-line__info">
+            <div class="cart-line__title">
+              <strong>{{ it.nombre }}</strong>
+              <span class="muted" *ngIf="it.size">&nbsp;• Talla {{ it.size }}</span>
+            </div>
+            <div class="cart-line__meta">
+              <span>Cant: {{ it.qty }}</span>
+              <span>{{ it.precio | currency:'COP' }}</span>
+            </div>
+          </div>
+
+          <button class="remove-btn" type="button" title="Eliminar" (click)="removeItem(i)">🗑️</button>
+        </div>
+      </ng-container>
+    </div>
+
+    <footer class="cart-modal__footer">
+      <div class="cart-modal__total">
+        Total:&nbsp;<strong>{{ (cartTotal) | currency:'COP' }}</strong>
+      </div>
+      <div class="cart-modal__actions">
+        <button type="button" class="btn" (click)="closeCart()">Seguir comprando</button>
+        <!-- Cierra el modal (y habilita scroll) ANTES de navegar -->
+        <a routerLink="/checkout" class="btn btn--primary" (click)="closeCart()">Pagar</a>
+      </div>
+    </footer>
+  </div>
+</div>

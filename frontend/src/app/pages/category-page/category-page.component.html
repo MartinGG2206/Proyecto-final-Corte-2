@@ -1,0 +1,29 @@
+<main class="cat-container">
+  <nav class="breadcrumb">
+    <a routerLink="/">Inicio</a>
+    <span>/</span>
+    <strong>{{ nombreCategoria }}</strong>
+  </nav>
+
+  <header class="cat-header">
+    <h1>Productos en “{{ nombreCategoria }}”</h1>
+    <p *ngIf="!loading">{{ productos.length }} resultado(s)</p>
+  </header>
+
+  <section *ngIf="loading" class="cat-loading">Cargando…</section>
+
+  <section *ngIf="!loading && productos.length === 0" class="cat-empty">
+    No hay productos en esta categoría por ahora.
+  </section>
+
+  <section class="cat-grid" *ngIf="!loading && productos.length">
+    <article class="card" *ngFor="let p of productos; trackBy: trackByProd">
+      <img [src]="p.imagen" [alt]="p.nombre" class="card__img" />
+      <div class="card__body">
+        <h3 class="card__title">{{ p.nombre }}</h3>
+        <p class="card__desc">{{ p.descripcion }}</p>
+        <div class="card__price">${{ p.precio }}</div>
+      </div>
+    </article>
+  </section>
+</main>

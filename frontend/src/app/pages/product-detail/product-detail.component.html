@@ -1,0 +1,122 @@
+<nav class="pd__crumbs">
+  <a routerLink="/" class="pd__back" [attr.aria-label]="'Volver'">← Volver</a>
+  <span class="pd__sep">/</span>
+  <span class="pd__crumb">{{ $any(producto)?.categoria || ($any(producto)?.categoria_slug | titlecase) }}</span>
+</nav>
+
+<ng-container *ngIf="!loading && producto; else loadingOrError">
+  <section class="pd">
+    <!-- Galería -->
+    <div class="pd__media">
+      <div class="pd__image">
+        <img [src]="producto.imagen" [alt]="producto.nombre" />
+      </div>
+
+      <div class="pd__thumbs">
+        <button type="button" class="thumb is-active" [attr.aria-label]="'Imagen 1'">
+          <img [src]="producto.imagen" [alt]="producto.nombre" />
+        </button>
+        <button type="button" class="thumb" disabled>
+          <img [src]="producto.imagen" [alt]="producto.nombre" />
+        </button>
+        <button type="button" class="thumb" disabled>
+          <img [src]="producto.imagen" [alt]="producto.nombre" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div class="pd__content">
+      <div class="pd__eyebrow" *ngIf="$any(producto)?.popular">Lo más nuevo</div>
+      <h1 class="pd__title">{{ producto.nombre }}</h1>
+      <div class="pd__sub">
+        {{ $any(producto)?.categoria || ($any(producto)?.categoria_slug | titlecase) }}
+      </div>
+
+      <div class="pd__price">{{ (producto.precio | number:'1.0-0') + ' COP' }}</div>
+
+      <!-- Selector de tallas -->
+      <div class="pd__swatch" *ngIf="showSizes">
+        <div class="pd__swatch-head">
+          <span>Selecciona la talla</span>
+          <a href="#" class="pd__size-guide" (click)="$event.preventDefault()">Guía de tallas</a>
+        </div>
+
+        <div class="pd__sizes">
+          <button
+            type="button"
+            class="size"
+            *ngFor="let t of sizes"
+            (click)="selectSize(t)"
+            [class.is-selected]="selectedSize === t"
+            [attr.aria-pressed]="selectedSize === t">
+            {{ t }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Cantidad -->
+      <div class="pd__qty">
+        <label class="pd__qty-label" for="qty">Cantidad</label>
+        <div class="qty">
+          <button type="button" class="qty__btn" (click)="quantity = quantity > 1 ? quantity - 1 : 1">−</button>
+          <input id="qty" type="number" min="1" [value]="quantity"
+                 (input)="quantity = +($any($event.target).value || 1)" />
+          <button type="button" class="qty__btn" (click)="quantity = quantity + 1">+</button>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <button class="pd__cta" (click)="addToCart()">Agregar a la bolsa de compras</button>
+
+      <!-- Descripción -->
+      <p class="pd__desc">{{ producto.descripcion }}</p>
+
+      <!-- Envío -->
+      <div class="pd__ship">
+        <div class="pd__ship-title">Envío*</div>
+        <div class="pd__ship-text">Para obtener información de envío precisa</div>
+        <a href="#" (click)="$event.preventDefault()">Editar ubicación</a>
+      </div>
+
+      <!-- ======= Reseñas ======= -->
+      <section class="reviews">
+        <h3>Reseñas del producto</h3>
+
+        <!-- Listado -->
+        <div *ngIf="reviews.length > 0; else noReviews">
+          <div *ngFor="let r of reviews" class="review">
+            <p class="stars">⭐ {{ r.estrellas }} / 5</p>
+            <p><strong>{{ r.usuario || 'Usuario' }}</strong> — {{ r.comentario }}</p>
+            <small>{{ r.fecha | date:'short' }}</small>
+          </div>
+        </div>
+        <ng-template #noReviews>
+          <p class="muted">Aún no hay reseñas para este producto.</p>
+        </ng-template>
+
+        <!-- Formulario -->
+        <div class="add-review">
+          <h4>Deja tu reseña</h4>
+          <label>Calificación:</label>
+          <div class="star-select">
+            <ng-container *ngFor="let s of [1,2,3,4,5]">
+              <span
+                class="star"
+                [class.filled]="s <= newReview.estrellas"
+                (click)="newReview.estrellas = s">★</span>
+            </ng-container>
+          </div>
+
+          <textarea [(ngModel)]="newReview.comentario" placeholder="Escribe tu opinión..."></textarea>
+          <button (click)="submitReview()" class="btn btn--primary">Enviar reseña</button>
+        </div>
+      </section>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template #loadingOrError>
+  <div *ngIf="loading" class="pd__loading">Cargando…</div>
+  <div *ngIf="!loading && error" class="pd__error">{{ error }}</div>
+</ng-template>

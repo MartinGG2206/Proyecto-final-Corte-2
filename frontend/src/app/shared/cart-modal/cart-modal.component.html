@@ -1,0 +1,46 @@
+<div class="overlay" (click)="close()"></div>
+
+<div class="panel" role="dialog" aria-modal="true">
+  <div class="panel__head">
+    <h3>Tu carrito</h3>
+    <button class="icon" (click)="close()" aria-label="Cerrar">✕</button>
+  </div>
+
+  <div class="panel__body">
+    <ng-container *ngIf="(cart.itemsObs$ | async) as items; else empty">
+      <div class="line" *ngFor="let it of items; let i = index">
+        <img class="thumb" [src]="it.imagen || ''" [alt]="it.nombre">
+        <div class="info">
+          <div class="name">{{ it.nombre }}</div>
+          <div class="meta" *ngIf="it.size">Talla: {{ it.size }}</div>
+          <div class="price">{{ it.precio | number:'1.0-0' }} COP</div>
+        </div>
+
+        <div class="qty">
+          <button (click)="dec(i)" aria-label="Restar">−</button>
+          <span>{{ it.qty }}</span>
+          <button (click)="inc(i)" aria-label="Sumar">+</button>
+        </div>
+
+        <button class="delete" (click)="remove(i)" aria-label="Eliminar">🗑</button>
+      </div>
+    </ng-container>
+
+    <ng-template #empty>
+      <p class="muted">Tu carrito está vacío.</p>
+    </ng-template>
+  </div>
+
+  <div class="panel__foot">
+    <div class="total">
+      Total:
+      <strong>
+        {{ (cart.totalObs$ | async) || 0 | number:'1.0-0' }} COP
+      </strong>
+    </div>
+    <div class="actions">
+      <button class="ghost" (click)="close()">Seguir comprando</button>
+      <button class="primary" (click)="checkout()">Pagar</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<section class="checkout">
+  <h2>Pago</h2>
+
+  <div class="grid">
+    <div class="panel">
+      <h3>Datos del comprador</h3>
+      <form (ngSubmit)="pay()" #f="ngForm">
+        <label>Nombre completo
+          <input type="text" [(ngModel)]="name" name="name" required>
+        </label>
+        <label>Correo
+          <input type="email" [(ngModel)]="email" name="email" required>
+        </label>
+        <label>Dirección
+          <input type="text" [(ngModel)]="address" name="address" required>
+        </label>
+        <label>Número de tarjeta (simulado)
+          <input type="text" [(ngModel)]="card" name="card" required>
+        </label>
+
+        <button class="btn primary" type="submit" [disabled]="paying">
+          {{ paying ? 'Procesando…' : 'Pagar ahora' }}
+        </button>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h3>Resumen</h3>
+      <ng-container *ngIf="(items$ | async) as items">
+        <div *ngFor="let it of items" class="row">
+          <span>{{ it.nombre }} <small *ngIf="it.size">({{ it.size }})</small> × {{ it.qty }}</span>
+          <strong>{{ (it.qty * it.precio) | currency:'COP' }}</strong>
+        </div>
+        <div class="sep"></div>
+        <div class="row total">
+          <span>Total</span>
+          <strong>{{ (total$ | async) | currency:'COP' }}</strong>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="success" *ngIf="done">
+    <h3>✅ Pago aprobado</h3>
+    <p>Gracias por tu compra. Número de orden: <strong>{{ orderId }}</strong></p>
+    <button class="btn primary" (click)="goHome()">Volver al inicio</button>
+  </div>
+</section>
